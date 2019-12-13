@@ -1,2 +1,6 @@
 # pnhs-flask-tut
-A flask tutorial for PNHS students
+An appliction development tutorial for PNHS students
+
+for the flask web app demo go to branch "flask-app-intro"
+
+
