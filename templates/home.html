@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+
+    <h1>Heros<h1>
+
+    {% for key, value in user.items() %}
+      <h2>Hello,  {{value.username}}</h2>
+   {% endfor %}
+
+
+   <form action="/home" method="POST">
+        New Hero:<br>
+        <input type="text" name="user"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    </body>
+</html>
