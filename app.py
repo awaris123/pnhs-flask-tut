@@ -1,15 +1,67 @@
+
+'''
+Python/Flask tutorial for PNHS AP CS students
+'''
 from flask import Flask, render_template, request, redirect, url_for
 
 '''
-We create an instance of an object called 'Flask' from the flask library
-'''
-app = Flask(__name__)
+We create an instance of an object called 'Flask' from the flask library which represents our application.
+We take in a "special python variable" that is always defined for every python script -> __name__
+The __name__ variable is special becuase, it's value depends on how we run this program,
+
+There are two ways to run this program:
+
+    - We execute it directly, i.e( python3 app.py )
+    - We import this script into another python file and use it's functions/objects
+
+If we run this program directly then  __name__ is == "__main__"
+If we import this script then __name__ == to whatever the name of the script is, in this case: "app"
 
 '''
+
+app = Flask(__name__)
+app.counter =4
+
+
+'''
+---------------------------------------------------------------------------------------------------------------------------------------------
+
 In python this is what call a dictionary or a hashtable which is a key/value store, it's how were going to store our data for this tutorial
 
-This dict is actaully special becuase its a nested hashtable, where the value is actaully another dict
- Simmilar to a two dimensional array but with dictionaries
+ex. heroes = {
+
+    "peter parker" : "Spiderman",
+    
+    "tony stark"  : "Iron Man",
+
+    "steve rodgers" : "Captain America"
+
+}
+
+We can index this data structure as so:
+
+heros["peter parker"]
+
+This yields - > "Spiderman"
+
+We can also create new key value pairs as so:
+
+heros["bruce banner"] = "hulk"
+
+Finally we can delete key value pairs as such:
+
+del heroes["peter parker"]
+
+this will remove that mapping from the dictionary
+
+----------------------------------------------------------------------------------------------------------------
+
+
+Normally we would actaully create a database connection with a database url, however for the sake of time and simplicty we will use a data structure
+There exist databases that have this similar Key Value stucture
+
+
+This dict is actaully special becuase its nested, where the value is actaully another dict
 '''
 
 fakeDB = {
@@ -33,10 +85,12 @@ fakeDB = {
 
 
 
+
+
 '''
 The home page when we first access our application
 Dont get intimidated by the decorater, its simply a function that takes in another function, which is the one we write directly underneath
-The flask object has a method called route, i.e(app.route) which is how were going to define what goes on at different areas of our application or websitehe 
+The flask object has a method called route, i.e(app.route) which is how were going to define what goes on at different areas of our application or website
 
 
 The first paramter we see is a slash, this defines the actual location of the logic going on at our application
@@ -44,12 +98,13 @@ The first paramter we see is a slash, this defines the actual location of the lo
 The second paramter is a list which holds a string typhat defines that type of request that will be handled
 
 There are many types of requests when dealing with HTTP however only 4 of them are most commonly used:
+
  - GET     -> This is what we use when we want to read or get data
  - POST    -> This is what we use when we want to create new data
  - PUT     -> This is what we use when we want to update or change data
  - DELETE  -> This is what we user when we want to delete data
 
-The third parameter is implict, and it's the function that we wrote
+The third parameter is implict, and it's the function that we wrote underneath the decorator
 '''
 
 @app.route("/", methods = {"GET"})
@@ -60,32 +115,86 @@ def index():
 
 
 ''' 
-We can see here that "routes" can let us view information about the state of the application
+We can see here that "routes" can let us view information about the state of the application via a GET request
 '''
 @app.route("/home", methods = {'GET'})
 def greetHero():
 
-    user = fakeDB
     title = "Home Page"
-    return render_template('home.html', user=user, title=title)
+    return render_template('home.html', user=fakeDB, title=title)
 
+'''
+If we want to look at something specific, we can pass in parameters through the header of the url
+'''
+@app.route("/home/<hero>", methods = {'GET'})
+def whichHero(hero):
+
+    for key, value in fakeDB.items():
+        title = "Home Page"
+        if value["username"] == hero:
+            temp = {
+                "user":value
+            }
+            return render_template('home.html', user = temp, title = title)
+
+    return redirect(url_for("greetHero"))
 
 '''
 But we can also create or POST data to change the state of the application
 '''
 @app.route("/home", methods={"POST"})
 def createHero():
-    payload = request.form["user"]
-    numHeros = len(fakeDB) + 1
-    key = "user" + str(numHeros)
+    print(request.json)
+    payload = request.json["user"]
+   
+    key = "user" + str(app.counter)
+    
 
     fakeDB[key] = {
         "username": payload,
-        "id" : numHeros
+        "id" : app.counter
     }
+    app.counter += 1
     for hero in fakeDB.values():
         print(hero["username"], hero["id"])
     
+    return redirect(url_for("greetHero"))
+
+
+
+@app.route("/home", methods={"PUT"})
+def changeHero():
+    try:
+        toBeChanged = request.json["user"]
+        newUser = request.json["newUser"]
+        for k, v in fakeDB.items():
+            if v["username"] == toBeChanged:
+                v["username"] = newUser
+
+        
+    except:
+        pass
+    
+    return redirect(url_for('greetHero'))
+
+
+
+@app.route("/home", methods={"DELETE"})
+def killHero():  
+    try:  
+        payload = request.json["user"]
+    
+        toDel = ""
+        for key, value in fakeDB.items():
+            if value["username"] == payload:
+                toDel = key
+                break
+        del fakeDB[toDel]
+
+        for hero in fakeDB.values():
+            print(hero["username"], hero["id"])
+    except:
+        pass
     return redirect(url_for("greetHero"))
     
 
