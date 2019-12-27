@@ -1,6 +1,29 @@
 # pnhs-flask-tut
-An appliction development tutorial for PNHS students
+A flask tutorial for PNHS students
 
-for the flask web app demo go to branch "flask-app-intro"
+
+
+# flask-app-intro run and download instructions:
+
+## Prerequisites
+Have git installed
+Have python 3 installed
+Have pip installed
+
+- clone repository
+
+- check out to intro branch by:
+    `git checkout flask-app-intro`
+- once inside the project folder run:
+    `pip3 install -r requirements.txt`
+
+- then run:
+    `python3 app.py`
+
+# Still in development
+- flask app with OOP
+- API tutorial
+- Twitter Clone?
+
 
 
