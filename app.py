@@ -9,7 +9,7 @@ We create an instance of an object called 'Flask' from the flask library which r
 We take in a "special python variable" that is always defined for every python script -> __name__
 The __name__ variable is special becuase, it's value depends on how we run this program,
 
-There are two ways to run this program:
+There are two ways to run any python program:
 
     - We execute it directly, i.e( python3 app.py )
     - We import this script into another python file and use it's functions/objects
@@ -20,7 +20,7 @@ If we import this script then __name__ == to whatever the name of the script is,
 '''
 
 app = Flask(__name__)
-app.counter =4
+app.counter = 4
 
 
 '''
@@ -82,6 +82,7 @@ fakeDB = {
     }
 }
 
+title = "Home Page"
 
 
 
@@ -113,7 +114,6 @@ def index():
 
 
 
-
 ''' 
 We can see here that "routes" can let us view information about the state of the application via a GET request
 '''
@@ -124,28 +124,35 @@ def greetHero():
     return render_template('home.html', user=fakeDB, title=title)
 
 '''
-If we want to look at something specific, we can pass in parameters through the header of the url
+If we want to look at or GET a specific resource (in this case our heroes are the resource), 
+we can pass in parameters through the header of the url,
+this is called passing parameters through the header 
+NOTE: in the decoratoer we take a parameter 'hero' is in carrot brackets, this denotes a header parameter which flask implicitly passes to our function as an argument
 '''
 @app.route("/home/<hero>", methods = {'GET'})
 def whichHero(hero):
-
-    for key, value in fakeDB.items():
-        title = "Home Page"
-        if value["username"] == hero:
-            temp = {
-                "user":value
-            }
-            return render_template('home.html', user = temp, title = title)
+    try:
+        for key, value in fakeDB.items():
+            title = "Home Page"
+            if value["username"] == hero:
+                temp = {
+                    "user":value
+                }
+                return render_template('home.html', user = temp, title = title)
+    except:
+        pass
 
     return redirect(url_for("greetHero"))
 
 '''
-But we can also create or POST data to change the state of the application
+But we can also create or POST data or a resource, we pass in paramters through the BODY of the request,
+this is different than the header as we saw previously, becuase the this data is 'hidden' and not passed through the URL
 '''
 @app.route("/home", methods={"POST"})
 def createHero():
     print(request.json)
     payload = request.json["user"]
+
    
     key = "user" + str(app.counter)
     
@@ -155,8 +162,7 @@ def createHero():
         "id" : app.counter
     }
     app.counter += 1
-    for hero in fakeDB.values():
-        print(hero["username"], hero["id"])
+
     
     return redirect(url_for("greetHero"))
 
@@ -167,11 +173,11 @@ def changeHero():
     try:
         toBeChanged = request.json["user"]
         newUser = request.json["newUser"]
+        print(toBeChanged, newUser)
         for k, v in fakeDB.items():
             if v["username"] == toBeChanged:
                 v["username"] = newUser
-
-        
+ 
     except:
         pass
     
@@ -191,10 +197,9 @@ def killHero():
                 break
         del fakeDB[toDel]
 
-        for hero in fakeDB.values():
-            print(hero["username"], hero["id"])
     except:
         pass
+
     return redirect(url_for("greetHero"))
     
 

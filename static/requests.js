@@ -1,17 +1,102 @@
 var baseUrl =  "http://127.0.0.1:5000/home"
-const name = document.getElementById("user")
+
 
 function post(){
-
-    var data = {
-        "user": name.value
+    try{
+        
+        var form = document.forms["create"]
+        var name = form.elements["user"]
+        
+        
+        var data = {
+            user : name.value
+        }
+        
+        
+        json = JSON.stringify(data)
+        
+        form.reset();
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: baseUrl,
+            data: json,
+            success: function(data){
+                console.log("it worked!");
+            },
+            dataType: "json"
+          });
     }
-    json = JSON.stringify(data)
+
+    catch{
+        console.log("request failed");
+    }
     
-    req = new XMLHttpRequest();
+}
+
+function put(){
+    try{
+        var form = document.forms["change"];
+        var name = document.forms["change"].elements["oldUser"]
+        var newName = document.forms["change"].elements["newUser"]
     
-    req.open("POST", baseUrl, true);
-    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    req.send(json);
+        var data = {
+            user : name.value,
+            newUser: newName.value
+        }
+        
+        json = JSON.stringify(data)
+        form.reset();
+
+    
+        $.ajax({
+            contentType: 'application/json',
+            type: "PUT",
+            url: baseUrl,
+            data: json,
+            success: function(data){
+                console.log("it worked!");
+            },
+            dataType: "json"
+          });
+    }
+
+    catch{
+        console.log("request failed");
+    }
+    
+}
+
+function del(){
+    try{
+        
+        var form = document.forms["kill"]
+        var name = document.forms["kill"].elements["toDie"]
+        
+        
+    
+        var data = {
+            user : name.value,
+        }
+        
+        json = JSON.stringify(data)
+        form.reset()
+    
+        $.ajax({
+            contentType: 'application/json',
+            type: "DELETE",
+            url: baseUrl,
+            data: json,
+            success: function(data){
+                console.log("it worked!");
+            },
+            dataType: "json"
+          });
+    }
+
+    catch{
+        console.log("request failed");
+    }
+    
 }
 

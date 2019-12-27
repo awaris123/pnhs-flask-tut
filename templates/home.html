@@ -1,7 +1,11 @@
 <html>
     <head>
         <title>{{ title }}</title>
+        <script type="text/javascript" src="static/requests.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
+
+    
     <body>
 
 
@@ -13,53 +17,29 @@
 
     
 
-    <form id="heroForm" onsubmit="post()">
+    <form id="create">
         New Hero:<br>
         <input type="text" name="user" id="user"><br>
-        <input type="submit" onsubmit="post()" value="Create new Hero!">
+        <input type="submit" onclick="post();" value="Create new Hero!">
     </form>
-
-
-
-
-    </body>
     
 
 
-    <script> 
-        var baseUrl =  "http://127.0.0.1:5000/home"
-        const name = document.getElementById("user")
+    <form id="change">
+        Old Hero:<br>
+        <input type="text" name="oldUser" id="oldUser"><br>
+        New Hero:<br>
+        <input type="text" name="newUser" id="newUser"><br>
+        <input type="submit" onclick="put();" value="Change a Hero!">
+    </form>
 
-        function post(){
+    <form id="kill">
+        Kill Hero:<br>
+        <input type="text" name="oldUser" id="toDie"><br>
+        
+        <input type="submit" onclick="del();" value="Change a Hero!">
+    </form>
 
-            var data = {
-                "user": name.value
-            }
-            json = JSON.stringify(data)
-            
-            req = new XMLHttpRequest();
-            
-            req.open("POST", baseUrl, true);
-            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            req.send(json);
-        }
-    </script>
-    <script> 
-        var baseUrl =  "http://127.0.0.1:5000/home"
-        const name = document.getElementById("user")
+    </body>
 
-        function delete(){
-
-            var data = {
-                "user": name.value
-            }
-            json = JSON.stringify(data)
-            
-            req = new XMLHttpRequest();
-            
-            req.open("POST", baseUrl, true);
-            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            req.send(json);
-        }
-    </script>
 </html>
