@@ -167,7 +167,11 @@ def createHero():
     return redirect(url_for("greetHero"))
 
 
-
+'''
+The Put method here takes in two paramteters in the request body
+a  hero that will be changed
+and the new hero that will replace it
+'''
 @app.route("/home", methods={"PUT"})
 def changeHero():
     try:
@@ -184,7 +188,9 @@ def changeHero():
     return redirect(url_for('greetHero'))
 
 
-
+'''
+This delete method will, take in a hero as a parameter and then delete or "kill" that hero
+'''
 @app.route("/home", methods={"DELETE"})
 def killHero():  
     try:  
