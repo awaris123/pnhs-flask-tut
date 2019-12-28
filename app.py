@@ -66,17 +66,17 @@ This dict is actaully special becuase its nested, where the value is actaully an
 
 fakeDB = {
 
-    "user1":{
+    "hero1":{
         "username":"Spiderman",
         "id" : 1
     },
 
-    "user2":{
+    "hero2":{
         "username":"Hulk",
         "id" : 2
     },
 
-    "user3":{
+    "hero3":{
         "username":"Wolverine",
         "id" : 3
     }
@@ -121,7 +121,7 @@ We can see here that "routes" can let us view information about the state of the
 def greetHero():
 
     title = "Home Page"
-    return render_template('home.html', user=fakeDB, title=title)
+    return render_template('home.html', heroes=fakeDB, title=title)
 
 '''
 If we want to look at or GET a specific resource (in this case our heroes are the resource), 
@@ -132,13 +132,15 @@ NOTE: in the decoratoer we take a parameter 'hero' is in carrot brackets, this d
 @app.route("/home/<hero>", methods = {'GET'})
 def whichHero(hero):
     try:
+
+        # This loop will iterate through our dictionary, we have to use two variables instead one to unpack the key/val pair from the dict
         for key, value in fakeDB.items():
             title = "Home Page"
             if value["username"] == hero:
                 temp = {
-                    "user":value
+                    "hero":value
                 }
-                return render_template('home.html', user = temp, title = title)
+                return render_template('home.html', heroes = temp, title = title)
     except:
         pass
 
@@ -154,7 +156,7 @@ def createHero():
     payload = request.json["user"]
 
    
-    key = "user" + str(app.counter)
+    key = "hero" + str(app.counter)
     
 
     fakeDB[key] = {

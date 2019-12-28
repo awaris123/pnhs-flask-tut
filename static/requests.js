@@ -4,6 +4,7 @@ var baseUrl =  "http://127.0.0.1:5000/home"
 function post(){
     try{
         
+      
         var form = document.forms["create"]
         var name = form.elements["user"]
         
