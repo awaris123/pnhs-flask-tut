@@ -2,7 +2,7 @@
 '''
 Python/Flask tutorial for PNHS AP CS students
 '''
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, request, jsonify
 from models.hero import Hero
 
 
@@ -75,24 +75,14 @@ hero3 = Hero("megaman")
 
 fakeDB = {
 
-    1:{
+    1: hero1.toDict(),
 
-        None
-    },
+    2: hero2.toDict(),
 
-    2:{
-        None
-    },
-
-    3:{
-        None
-    }
+    3: hero3.toDict()
 }
 
-fakeDB[1] = hero1.toDict()
-fakeDB[2] = hero2.toDict()
-fakeDB[3] = hero3.toDict()
-title = "Home Page"
+
 
 
 
@@ -127,11 +117,11 @@ def index():
 ''' 
 We can see here that "routes" can let us view information about the state of the application via a GET request
 '''
-@app.route("/home", methods = {'GET'})
+@app.route("/api/heroes", methods = {'GET'})
 def greetHero():
 
-    title = "Home Page"
-    return render_template('home.html', heroes=fakeDB, title=title)
+    return jsonify(fakeDB), 200
+    
 
 '''
 If we want to look at or GET a specific resource (in this case our heroes are the resource), 
@@ -139,45 +129,44 @@ we can pass in parameters through the header of the url,
 this is called passing parameters through the header 
 NOTE: in the decoratoer we take a parameter 'hero' is in carrot brackets, this denotes a header parameter which flask implicitly passes to our function as an argument
 '''
-@app.route("/home/<hero>", methods = {'GET'})
+@app.route("/api/heroes/<hero>", methods = {'GET'})
 def whichHero(hero):
     try:
         
         # This loop will iterate through our dictionary, we have to use two variables instead one to unpack the key/val pair from the dict
-        for descriptions in fakeDB.values():
-            if descriptions["name"] == hero:
-                tmp = descriptions
-
-        return render_template('profile.html', hero = tmp, title = title)
+        for description in fakeDB.values():
+            if description["name"] == hero:
+                return jsonify(description), 200
     except:
-        print("AHH")
         pass
 
-    return redirect(url_for("greetHero"))
+    return 404
 
 '''
 But we can also create or POST data or a resource, we pass in paramters through the BODY of the request,
 this is different than the header as we saw previously, becuase the this data is 'hidden' and not passed through the URL
 '''
-@app.route("/home", methods={"POST"})
+@app.route("/api/heroes", methods={"POST"})
 def createHero():
-    print(request.json)
-    payload = request.json["user"]
-    newHero = Hero(payload)
-    print(newHero)
-    app.counter += 1
-    fakeDB[app.counter] = newHero.toDict()
 
-    
-    return redirect(url_for("greetHero"))
+    try:
+        payload = request.json["user"]
+        newHero = Hero(payload)
+        print(newHero)
+        app.counter += 1
+        fakeDB[app.counter] = newHero.toDict()
 
+        return 200
+
+    except:
+        return 500
 
 '''
 The Put method here takes in two paramteters in the request body
 a  hero that will be changed
 and the new hero that will replace it
 '''
-@app.route("/home", methods={"PUT"})
+@app.route("/api/heroes", methods={"PUT"})
 def changeHero():
     try:
         toBeChanged = request.json["user"]
@@ -186,17 +175,18 @@ def changeHero():
         for key, value in fakeDB.items():
             if  value["name"] == toBeChanged:
                 fakeDB[key] = Hero(newUser).toDict()
+
+        return 200
  
     except:
-        pass
+        return 500
     
-    return redirect(url_for('greetHero'))
 
 
 '''
 This delete method will, take in a hero as a parameter and then delete or "kill" that hero
 '''
-@app.route("/home", methods={"DELETE"})
+@app.route("/api/heroes", methods={"DELETE"})
 def killHero():  
     try:  
         payload = request.json["user"]
@@ -208,10 +198,13 @@ def killHero():
                 break
         del fakeDB[toDel]
 
-    except:
-        pass
+        return 200
 
-    return redirect(url_for("greetHero"))
+
+    except:
+        return 500
+
+
     
 
 
