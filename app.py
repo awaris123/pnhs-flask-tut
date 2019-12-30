@@ -3,6 +3,9 @@
 Python/Flask tutorial for PNHS AP CS students
 '''
 from flask import Flask, render_template, request, redirect, url_for
+from models.hero import Hero
+
+
 
 '''
 We create an instance of an object called 'Flask' from the flask library which represents our application.
@@ -20,7 +23,8 @@ If we import this script then __name__ == to whatever the name of the script is,
 '''
 
 app = Flask(__name__)
-app.counter = 4
+app.counter = 3
+
 
 
 '''
@@ -64,24 +68,30 @@ There exist databases that have this similar Key Value stucture
 This dict is actaully special becuase its nested, where the value is actaully another dict
 '''
 
+hero1 = Hero("mysterio")
+hero2 = Hero("quicksilver")
+hero3 = Hero("megaman")
+
+
 fakeDB = {
 
-    "hero1":{
-        "username":"Spiderman",
-        "id" : 1
+    1:{
+
+        None
     },
 
-    "hero2":{
-        "username":"Hulk",
-        "id" : 2
+    2:{
+        None
     },
 
-    "hero3":{
-        "username":"Wolverine",
-        "id" : 3
+    3:{
+        None
     }
 }
 
+fakeDB[1] = hero1.toDict()
+fakeDB[2] = hero2.toDict()
+fakeDB[3] = hero3.toDict()
 title = "Home Page"
 
 
@@ -132,16 +142,15 @@ NOTE: in the decoratoer we take a parameter 'hero' is in carrot brackets, this d
 @app.route("/home/<hero>", methods = {'GET'})
 def whichHero(hero):
     try:
-
+        
         # This loop will iterate through our dictionary, we have to use two variables instead one to unpack the key/val pair from the dict
-        for key, value in fakeDB.items():
-            title = "Home Page"
-            if value["username"] == hero:
-                temp = {
-                    "hero":value
-                }
-                return render_template('home.html', heroes = temp, title = title)
+        for descriptions in fakeDB.values():
+            if descriptions["name"] == hero:
+                tmp = descriptions
+
+        return render_template('profile.html', hero = tmp, title = title)
     except:
+        print("AHH")
         pass
 
     return redirect(url_for("greetHero"))
@@ -154,16 +163,10 @@ this is different than the header as we saw previously, becuase the this data is
 def createHero():
     print(request.json)
     payload = request.json["user"]
-
-   
-    key = "hero" + str(app.counter)
-    
-
-    fakeDB[key] = {
-        "username": payload,
-        "id" : app.counter
-    }
+    newHero = Hero(payload)
+    print(newHero)
     app.counter += 1
+    fakeDB[app.counter] = newHero.toDict()
 
     
     return redirect(url_for("greetHero"))
@@ -180,9 +183,9 @@ def changeHero():
         toBeChanged = request.json["user"]
         newUser = request.json["newUser"]
         print(toBeChanged, newUser)
-        for k, v in fakeDB.items():
-            if v["username"] == toBeChanged:
-                v["username"] = newUser
+        for key, value in fakeDB.items():
+            if  value["name"] == toBeChanged:
+                fakeDB[key] = Hero(newUser).toDict()
  
     except:
         pass
@@ -200,7 +203,7 @@ def killHero():
     
         toDel = ""
         for key, value in fakeDB.items():
-            if value["username"] == payload:
+            if value["name"] == payload:
                 toDel = key
                 break
         del fakeDB[toDel]

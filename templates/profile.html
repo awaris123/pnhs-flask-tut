@@ -18,6 +18,7 @@
 
     <div class = "container">
         <div class = "row">
+
             <div class = "col-sm-4">
                 <form id="create">
                     New Hero:<br>
@@ -43,9 +44,10 @@
 
             
             <div class = "col-sm-4">
-                {% for key, value in heroes.items() %}
-                <h2>Hello,  {{value.name}}</h2>
-                {% endfor %}
+                <h2>Hero:  {{hero.name}}</h2>
+                <br>
+                <h3>Power:  {{hero.power}}</h3>
+                <h3>Orign Story:  {{hero.origin}}</h3>
             </div>
 
         </div>

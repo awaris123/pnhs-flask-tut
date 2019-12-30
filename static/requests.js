@@ -1,6 +1,21 @@
 var baseUrl =  "http://127.0.0.1:5000/home"
 
 
+
+function get(){
+    try{
+        alert("AH")
+        var form = document.forms["search"]
+        var name  = form.elements["user"]
+        url = baseUrl +"/"+name
+        
+
+    }
+    catch{
+        ;
+    }
+}
+
 function post(){
     try{
         
