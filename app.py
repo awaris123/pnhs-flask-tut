@@ -120,7 +120,7 @@ We can see here that "routes" can let us view information about the state of the
 @app.route("/api/heroes", methods = {'GET'})
 def greetHero():
 
-    return jsonify(fakeDB), 200
+    return jsonify(fakeDB), "200"
     
 
 '''
@@ -136,11 +136,11 @@ def whichHero(hero):
         # This loop will iterate through our dictionary, we have to use two variables instead one to unpack the key/val pair from the dict
         for description in fakeDB.values():
             if description["name"] == hero:
-                return jsonify(description), 200
+                return jsonify(description), "200"
     except:
         pass
 
-    return 404
+    return "404"
 
 '''
 But we can also create or POST data or a resource, we pass in paramters through the BODY of the request,
@@ -156,10 +156,10 @@ def createHero():
         app.counter += 1
         fakeDB[app.counter] = newHero.toDict()
 
-        return 200
+        return "200"
 
     except:
-        return 500
+        return "500"
 
 '''
 The Put method here takes in two paramteters in the request body
@@ -176,10 +176,10 @@ def changeHero():
             if  value["name"] == toBeChanged:
                 fakeDB[key] = Hero(newUser).toDict()
 
-        return 200
+        return "200"
  
     except:
-        return 500
+        return "500"
     
 
 
@@ -198,11 +198,11 @@ def killHero():
                 break
         del fakeDB[toDel]
 
-        return 200
+        return "200"
 
 
     except:
-        return 500
+        return "500"
 
 
     
