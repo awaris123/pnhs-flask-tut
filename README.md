@@ -1,7 +1,10 @@
 # pnhs-flask-tut
 A flask tutorial for PNHS students
 
-# flask-app-intro run and download instructions:
+### The API for this tutorial is deployed at:
+https://flask-heroes-api.herokuapp.com/api/heroes
+
+# flask-api-intro run and download instructions:
 
 ## Prerequisites
 Have git installed
