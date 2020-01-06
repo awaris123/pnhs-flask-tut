@@ -28,13 +28,16 @@ def greetHero():
 @app.route("/api/heroes/<hero>", methods = {'GET'})
 def whichHero(hero):
     try:
-        headRef= db.reference('')
-        for description in list(headRef.get())[1::]:
-            if description["name"] == hero:
-                res = description
+        print("I have been called")
+        headRef= db.reference(hero)
+        if headRef:
+            return headRef.get(), "200"
+        else:
+            1 / 0
+      
 
-        return jsonify(res), "200"
-        
+        return  "200"
+
     except:
         pass
 
