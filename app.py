@@ -29,14 +29,11 @@ def greetHero():
 def whichHero(hero):
     try:
         print("I have been called")
-        headRef= db.reference(hero)
-        if headRef:
-            return headRef.get(), "200"
+        heroRef = db.reference(hero)
+        if heroRef:
+            return heroRef.get(), "200"
         else:
             1 / 0
-      
-
-        return  "200"
 
     except:
         pass
