@@ -24,6 +24,8 @@ Have pip installed
 #### For Flask API:
 `git checkout flask-hero-api`
 
+
+### After chooosing a branch
 - once inside the project folder run:
     `pip3 install -r requirements.txt`
 
