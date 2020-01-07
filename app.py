@@ -68,30 +68,20 @@ There exist databases that have this similar Key Value stucture
 This dict is actaully special becuase its nested, where the value is actaully another dict
 '''
 
-hero1 = Hero("mysterio")
-hero2 = Hero("quicksilver")
-hero3 = Hero("megaman")
+hero1 = Hero("mysterio").toDict()
+hero2 = Hero("quicksilver").toDict()
+hero3 = Hero("megaman").toDict()
 
 
 fakeDB = {
 
-    1:{
+    1:hero1,
 
-        None
-    },
+    2:hero2,
 
-    2:{
-        None
-    },
-
-    3:{
-        None
-    }
+    3:hero3
 }
 
-fakeDB[1] = hero1.toDict()
-fakeDB[2] = hero2.toDict()
-fakeDB[3] = hero3.toDict()
 title = "Home Page"
 
 
