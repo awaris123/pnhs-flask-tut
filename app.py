@@ -110,7 +110,7 @@ The third parameter is implict, and it's the function that we wrote underneath t
 
 @app.route("/", methods = {"GET"})
 def index():
-    return "<h1>hello world!<h1>"
+    return "<h1>hello user!</h1>"
 
 
 
